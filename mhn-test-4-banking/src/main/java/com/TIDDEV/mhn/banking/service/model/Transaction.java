@@ -1,5 +1,6 @@
 package com.TIDDEV.mhn.banking.service.model;
 
+import com.TIDDEV.mhn.banking.service.enums.TransactionStatus;
 import com.TIDDEV.mhn.banking.service.enums.TransactionType;
 
 import javax.persistence.*;
@@ -34,6 +35,8 @@ public class Transaction {
     private Long toAccId;
     @Column(name = "TRANSACTION_AMOUNT")
     private BigDecimal transactionAmount;
+    @Column(name = "TRANSACTION_STATUS")
+    private TransactionStatus status;
     @ManyToOne
     @JoinColumn(name = "ACCOUNT_ID")
     @JsonBackReference

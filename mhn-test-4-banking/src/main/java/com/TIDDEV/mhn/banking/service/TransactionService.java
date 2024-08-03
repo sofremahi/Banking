@@ -1,5 +1,6 @@
 package com.TIDDEV.mhn.banking.service;
 
+import com.TIDDEV.mhn.banking.service.enums.TransactionStatus;
 import com.TIDDEV.mhn.banking.service.enums.TransactionType;
 import com.TIDDEV.mhn.banking.service.model.Account;
 import com.TIDDEV.mhn.banking.service.model.Transaction;
@@ -17,7 +18,7 @@ public interface TransactionService {
     List<Transaction> findByType (TransactionType type);
     List<Transaction> findByToAcc(Long id);
     List<Transaction> findByAccTo(Long id);
-    void add(TransactionType type , Long toAcc, BigDecimal amount , Long accId);
+    void add(TransactionType type , Long toAcc, BigDecimal amount , Long accId , TransactionStatus status);
 
 
 

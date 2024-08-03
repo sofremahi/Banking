@@ -14,8 +14,18 @@ public class Response<T> {
     private HttpStatus status ;
     private T data ;
 
+    public Response( String message) {
+        this.message = message;
+    }
+    public Response(T data , String message) {
+        this.message = message;
+        this.data = data;
+    }
     public Response(T data , HttpStatus status) {
         this.status = status;
+        this.data = data;
+    }
+    public Response(T data  ) {
         this.data = data;
     }
     public Response(HttpStatus status, T data) {

@@ -1,6 +1,7 @@
 package com.TIDDEV.mhn.banking.service.serviceImpl;
 
 import com.TIDDEV.mhn.banking.service.TransactionService;
+import com.TIDDEV.mhn.banking.service.enums.TransactionStatus;
 import com.TIDDEV.mhn.banking.service.enums.TransactionType;
 import com.TIDDEV.mhn.banking.service.model.Transaction;
 import com.TIDDEV.mhn.banking.service.repository.AccRepository;
@@ -63,7 +64,7 @@ private EntityManager entityManager;
     }
 
     @Override
-    public void add(TransactionType type, Long toAcc, BigDecimal amount, Long accId) {
+    public void add(TransactionType type, Long toAcc, BigDecimal amount, Long accId , TransactionStatus status) {
         String sequenceQuery = "SELECT tracking_no_seq.NEXTVAL FROM DUAL";
         Long sequenceValue = ((Number) entityManager.createNativeQuery(sequenceQuery).getSingleResult()).longValue();
         Random random  = new Random();
@@ -74,6 +75,7 @@ private EntityManager entityManager;
         transaction.setType(type);
         transaction.setDateTime(LocalDate.now());
         transaction.setToAccId(toAcc);
+        transaction.setStatus(status);
         transactionRepository.save(transaction);
         log.info("transaction with UUID " + transaction.getId() + " added");
     }

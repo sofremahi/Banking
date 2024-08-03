@@ -28,6 +28,8 @@ public class QTransaction extends EntityPathBase<Transaction> {
 
     public final ComparablePath<java.util.UUID> id = createComparable("id", java.util.UUID.class);
 
+    public final EnumPath<com.TIDDEV.mhn.banking.service.enums.TransactionStatus> status = createEnum("status", com.TIDDEV.mhn.banking.service.enums.TransactionStatus.class);
+
     public final NumberPath<Long> toAccId = createNumber("toAccId", Long.class);
 
     public final StringPath trackingNo = createString("trackingNo");
