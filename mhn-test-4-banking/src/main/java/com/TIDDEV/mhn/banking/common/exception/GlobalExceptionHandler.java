@@ -18,4 +18,9 @@ public class GlobalExceptionHandler {
         Response response = new Response(e.getMessage());
         return new ResponseEntity<>(response , HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(NotValidInputException.class)
+    public ResponseEntity<Response> notValidInput(NotValidInputException e){
+        Response response = new Response(e.getMessage());
+        return new ResponseEntity<>(response , HttpStatus.BAD_REQUEST);
+    }
 }

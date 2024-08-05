@@ -1,6 +1,7 @@
 package com.TIDDEV.mhn.banking.web;
 
 import com.TIDDEV.mhn.banking.common.exception.NotEnoughMoneyException;
+import com.TIDDEV.mhn.banking.common.exception.NotValidInputException;
 import com.TIDDEV.mhn.banking.common.response.Response;
 import com.TIDDEV.mhn.banking.service.AccService;
 import com.TIDDEV.mhn.banking.service.OperationService;
@@ -42,6 +43,8 @@ public class OperationsController {
                     accService.findByNo(targetAccNo).getId(), transactionAmount,
                     accService.findByNo(mainAccNo).getId(), TransactionStatus.failure);
             throw e;
+        } catch (NotValidInputException e){
+            throw e ;
         }
 
     }
