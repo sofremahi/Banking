@@ -5,17 +5,25 @@ import com.TIDDEV.mhn.banking.service.enums.AccountType;
 import com.TIDDEV.mhn.banking.service.model.Account;
 import com.TIDDEV.mhn.banking.service.modelDto.AccountDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/rest/banking/account")
 @RequiredArgsConstructor
 public class AccController {
     private final AccService service;
+
+    private final MessageSource messageSource;
+
+    public String getMessage(String code) {
+        return messageSource.getMessage(code, null, Locale.getDefault());
+    }
     @GetMapping("/find")
     public Response<List<AccountDto>> find() {
         return new Response<>(service.findAll(), HttpStatus.FOUND);
@@ -46,6 +54,6 @@ public class AccController {
     public Response<List<AccountDto>> addAccounts(@PathVariable("customerId") Long id ,
                                                @RequestBody List<AccountDto> accounts) {
          service.addAccounts(id ,accounts);
-        return new Response<>("accounts added ");
+        return new Response<>(getMessage("accounts.added"));
     }
 }

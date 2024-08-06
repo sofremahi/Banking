@@ -12,12 +12,15 @@ import com.TIDDEV.mhn.banking.service.modelDto.OperatingDepositDto;
 import com.TIDDEV.mhn.banking.service.modelDto.OperationTransferDto;
 import com.TIDDEV.mhn.banking.service.modelDto.OperationWithdrawDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("rest/banking/operate")
@@ -26,6 +29,11 @@ public class OperationsController {
     private final OperationService service;
     private final TransactionService transactionService;
     private final AccService accService;
+    private final MessageSource messageSource;
+
+    public String getMessage(String code) {
+        return messageSource.getMessage(code, null, Locale.getDefault());
+    }
 
     @GetMapping("/transfer/{mainAccNo}/{targetAccNo}/{transactionAmount}")
     public Response<OperationTransferDto> transfer(@PathVariable String mainAccNo,
@@ -88,6 +96,6 @@ public class OperationsController {
     @GetMapping("/delete/transactions")
     public void deleteTransactions(){
         service.deleteTransactions();
-        System.out.println("all transactions status set to deleted");
+        System.out.println(getMessage("all.transactions.status.set.to.deleted"));
     }
 }

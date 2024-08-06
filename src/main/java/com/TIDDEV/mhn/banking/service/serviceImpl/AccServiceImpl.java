@@ -1,5 +1,6 @@
 package com.TIDDEV.mhn.banking.service.serviceImpl;
 
+import com.TIDDEV.mhn.banking.common.exception.NotFoundExceptionCustom;
 import com.TIDDEV.mhn.banking.service.AccService;
 import com.TIDDEV.mhn.banking.service.Mapper.AccountMapper;
 import com.TIDDEV.mhn.banking.service.enums.AccountType;
@@ -64,7 +65,7 @@ public class AccServiceImpl implements AccService {
     @Transactional
     public List<AccountDto> addAccounts(Long customerId , List<AccountDto> accounts) {
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+                .orElseThrow(() -> new NotFoundExceptionCustom("customer.not.found"));
 List<Account> accountList = accounts.stream().map(acc -> accountMapper.dtoToAcc(acc)).collect(Collectors.toList());
         // Set the customer for each account
         accountList.forEach(account -> account.setCustomer(customer));
@@ -90,7 +91,7 @@ List<Account> accountList = accounts.stream().map(acc -> accountMapper.dtoToAcc(
             }
         }
         });
-        System.out.println("Wage payment was successfully processed.");
+        System.out.println("wage.payment.success");
 
     }
 }

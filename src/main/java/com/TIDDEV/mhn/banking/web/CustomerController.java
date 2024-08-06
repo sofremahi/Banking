@@ -5,10 +5,13 @@ import com.TIDDEV.mhn.banking.service.CustomerService;
 import com.TIDDEV.mhn.banking.service.model.Customer;
 import com.TIDDEV.mhn.banking.service.modelDto.CustomerDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/rest/banking/customer")
@@ -16,6 +19,11 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService service;
 
+    private final MessageSource messageSource;
+
+    public String getMessage(String code) {
+        return messageSource.getMessage(code, null, Locale.getDefault());
+    }
 
     @GetMapping("/find")
     public Response<List<Customer>> find() {
@@ -46,7 +54,7 @@ public class CustomerController {
 @PostMapping
     public Response<String> addCustomer(@RequestBody CustomerDto dto){
          service.addCustomer(dto);
-         return new Response<>("customer added ") ;
+         return new Response<>(getMessage("customer.added")) ;
 
 }
 

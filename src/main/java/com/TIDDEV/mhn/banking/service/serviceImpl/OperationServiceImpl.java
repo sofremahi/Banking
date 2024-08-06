@@ -14,10 +14,12 @@ import com.TIDDEV.mhn.banking.service.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.asm.Advice;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.Locale;
 
 @Service
 @Slf4j
@@ -28,6 +30,11 @@ public class OperationServiceImpl implements OperationService {
     private final CustomerRepository customerRepository;
     private final TransactionRepository transactionRepository;
 
+    private final MessageSource messageSource;
+
+    public String getMessage(String code) {
+        return messageSource.getMessage(code, null, Locale.getDefault());
+    }
     public OperationTransferDto transferDto(String accNoMain, String accNoTarget,
                                             BigDecimal transactionAmount) {
         // check if the statements given are valid
@@ -38,7 +45,7 @@ public class OperationServiceImpl implements OperationService {
             Account main = accRepository.findByNo(accNoMain);
             Account target = accRepository.findByNo(accNoTarget);
             if (main.getAccountAmount().subtract(transactionAmount).compareTo(new BigDecimal("10")) <= 0) {
-                throw new NotEnoughMoneyException("Insufficient funds in the main account.");
+                throw new NotEnoughMoneyException(getMessage("insufficient.funds"));
             } else {
                 main.setAccountAmount(main.getAccountAmount().subtract(transactionAmount));
                 target.setAccountAmount(target.getAccountAmount().add(transactionAmount));
@@ -57,15 +64,14 @@ public class OperationServiceImpl implements OperationService {
                 return dto;
             }
         }else if(accRepository.findByNo(accNoMain) == null){
-            throw new NotValidInputException("try entering a valid main account number");
+            throw new NotValidInputException(getMessage("try.valid.account.number"));
         }else if (accRepository.findByNo(accNoTarget) == null){
-            throw new NotValidInputException("try entering a valid target account number");
+            throw new NotValidInputException(getMessage("try.valid.target.account.number"));
         }else if( transactionAmount.compareTo(new BigDecimal(0)) < 0){
-            throw new NotValidInputException("try entering a valid transaction amount");
+            throw new NotValidInputException(getMessage("try entering a valid transaction amount"));
         }
 
-        throw new NotValidInputException("try entering a valid main account number and a valid target account number with a" +
-                " valid transaction amount");
+        throw new NotValidInputException(getMessage("try.valid.input"));
     }
 
     @Override
@@ -85,11 +91,11 @@ public class OperationServiceImpl implements OperationService {
             dto.setRemaining(main.getAccountAmount());
             return dto;
         } else if (accRepository.findByNo(accNoMain) == null) {
-            throw new NotValidInputException("try entering a valid account number ");
+            throw new NotValidInputException(getMessage("try.valid.account.number"));
         }else if( transactionAmount.compareTo(new BigDecimal(0)) < 0){
-            throw new NotValidInputException("try entering a valid transaction amount") ;
+            throw new NotValidInputException(getMessage("try.valid.transaction.amount") );
         }
-        throw new NotValidInputException("try entering a valid input for both account number and transaction amount");
+        throw new NotValidInputException(getMessage("try.valid.input.account.transaction"));
     }
 
     @Override
@@ -99,7 +105,7 @@ public class OperationServiceImpl implements OperationService {
             //operating
             Account main = accRepository.findByNo(accNoMain);
             if (main.getAccountAmount().subtract(transactionAmount).compareTo(new BigDecimal("10")) <= 0) {
-                throw new NotEnoughMoneyException("Insufficient funds in the main account.");
+                throw new NotEnoughMoneyException(getMessage("insufficient.funds"));
             } else {
                 main.setAccountAmount(main.getAccountAmount().subtract(transactionAmount));
                 accRepository.save(main);
@@ -113,11 +119,11 @@ public class OperationServiceImpl implements OperationService {
                 return dto;
             }
         }else if(accRepository.findByNo(accNoMain) == null){
-            throw new NotValidInputException("try entering a valid account number") ;
+            throw new NotValidInputException(getMessage("try.valid.account.number")) ;
         }else if(transactionAmount.compareTo(new BigDecimal(0)) < 0){
-            throw new NotValidInputException("try entering a valid transaction amount") ;
+            throw new NotValidInputException(getMessage("try.valid.transaction.amount")) ;
         }
-        throw new NotValidInputException("try entering a valid input for both account number and transaction amount");
+        throw new NotValidInputException(getMessage("try.valid.input.account.transaction"));
     }
 @Transactional
     @Override
