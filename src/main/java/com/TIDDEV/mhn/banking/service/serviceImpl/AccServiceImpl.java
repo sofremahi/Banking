@@ -1,5 +1,4 @@
 package com.TIDDEV.mhn.banking.service.serviceImpl;
-
 import com.TIDDEV.mhn.banking.common.exception.NotFoundExceptionCustom;
 import com.TIDDEV.mhn.banking.service.AccService;
 import com.TIDDEV.mhn.banking.service.Mapper.AccountMapper;
@@ -11,14 +10,15 @@ import com.TIDDEV.mhn.banking.service.repository.AccRepository;
 import com.TIDDEV.mhn.banking.service.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +28,11 @@ import java.util.stream.Collectors;
 public class AccServiceImpl implements AccService {
     private final AccRepository accRepository;
     private final CustomerRepository customerRepository;
+    private final  MessageSource messageSource;
 
+    public String getMessage(String code) {
+        return messageSource.getMessage(code, null, Locale.getDefault());
+    }
     private final AccountMapper accountMapper;
     @Override
     public List<AccountDto> findAll() {
@@ -91,7 +95,7 @@ List<Account> accountList = accounts.stream().map(acc -> accountMapper.dtoToAcc(
             }
         }
         });
-        System.out.println("wage.payment.success");
+        System.out.println(getMessage("wage.payment.success"));
 
     }
 }
