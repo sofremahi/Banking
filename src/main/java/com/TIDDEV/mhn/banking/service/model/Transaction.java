@@ -37,6 +37,8 @@ public class Transaction {
     private BigDecimal transactionAmount;
     @Column(name = "TRANSACTION_STATUS")
     private TransactionStatus status;
+    @Column(name = "DELETE_STATUS")
+    private Boolean isDeleted;
     @ManyToOne
     @JoinColumn(name = "ACCOUNT_ID")
     @JsonBackReference

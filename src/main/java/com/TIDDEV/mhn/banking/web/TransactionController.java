@@ -1,13 +1,11 @@
 package com.TIDDEV.mhn.banking.web;
 
-import ch.qos.logback.core.util.Loader;
 import com.TIDDEV.mhn.banking.common.response.Response;
 import com.TIDDEV.mhn.banking.service.TransactionService;
 import com.TIDDEV.mhn.banking.service.enums.TransactionType;
-import com.TIDDEV.mhn.banking.service.model.Account;
 import com.TIDDEV.mhn.banking.service.model.Transaction;
+import com.TIDDEV.mhn.banking.service.modelDto.TransactionDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +24,7 @@ public class TransactionController {
     private final TransactionService service;
 
     @GetMapping("/find")
-    public Response<List<Transaction>> find() {
+    public Response<List<TransactionDto>> find() {
         return new Response<>(service.findAll(), HttpStatus.FOUND);
     }
 

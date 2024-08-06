@@ -5,10 +5,12 @@ import com.TIDDEV.mhn.banking.service.modelDto.AccountDto;
 import com.TIDDEV.mhn.banking.service.repository.AccRepository;
 import com.TIDDEV.mhn.banking.service.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.Random;
-
+@Component
 @RequiredArgsConstructor
 public class AccountMapperImpl implements AccountMapper{
 private final CustomerRepository customerRepository;

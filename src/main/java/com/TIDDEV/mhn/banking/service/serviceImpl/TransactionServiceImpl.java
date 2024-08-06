@@ -1,9 +1,11 @@
 package com.TIDDEV.mhn.banking.service.serviceImpl;
 
+import com.TIDDEV.mhn.banking.service.Mapper.TransactionMapper;
 import com.TIDDEV.mhn.banking.service.TransactionService;
 import com.TIDDEV.mhn.banking.service.enums.TransactionStatus;
 import com.TIDDEV.mhn.banking.service.enums.TransactionType;
 import com.TIDDEV.mhn.banking.service.model.Transaction;
+import com.TIDDEV.mhn.banking.service.modelDto.TransactionDto;
 import com.TIDDEV.mhn.banking.service.repository.AccRepository;
 import com.TIDDEV.mhn.banking.service.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -26,12 +29,15 @@ import java.util.UUID;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
 private final AccRepository accRepository;
+private final TransactionMapper transactionMapper;
 @PersistenceContext
 private EntityManager entityManager;
 
     @Override
-    public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+    public List<TransactionDto> findAll() {
+        List<Transaction> transactions = transactionRepository.findDeletedStatusFalse();
+        return transactions.stream().map(transaction ->transactionMapper.transactionToDto(transaction)).
+                collect(Collectors.toList());
     }
     @Override
     public Transaction findById(UUID id) {
@@ -75,6 +81,7 @@ private EntityManager entityManager;
         transaction.setType(type);
         transaction.setDateTime(LocalDate.now());
         transaction.setToAccId(toAcc);
+        transaction.setIsDeleted(false);
         transaction.setStatus(status);
         transactionRepository.save(transaction);
         log.info("transaction with UUID " + transaction.getId() + " added");

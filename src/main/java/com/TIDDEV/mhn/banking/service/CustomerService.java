@@ -1,6 +1,7 @@
 package com.TIDDEV.mhn.banking.service;
 
 import com.TIDDEV.mhn.banking.service.model.Customer;
+import com.TIDDEV.mhn.banking.service.modelDto.CustomerDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,5 +13,6 @@ public interface CustomerService {
     Customer findByPhone(String phone);
     Customer findByNumber(String number);
     Customer findByNationalCode(String nationalCode);
+    void addCustomer(CustomerDto dto);
 
 }

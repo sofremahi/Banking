@@ -4,9 +4,10 @@ import com.TIDDEV.mhn.banking.service.model.Customer;
 import com.TIDDEV.mhn.banking.service.modelDto.CustomerDto;
 import com.TIDDEV.mhn.banking.service.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
-
+@Component
 @RequiredArgsConstructor
 public class CustomerMapperImpl implements CustomerMapper{
     private final Random random = new Random();
@@ -17,6 +18,7 @@ private final CustomerRepository customerRepository;
      customer.setId(generateUniqueId());
      customer.setName(dto.getName());
     customer.setPhone(dto.getPhone());
+    customer.setNumber("CUST00" + random.nextLong(100));
     customer.setNationalCode(dto.getNationalCode());
     return customer ;
     }
@@ -33,7 +35,7 @@ private final CustomerRepository customerRepository;
     public Long generateUniqueId() {
         Long id;
         do {
-            id = random.nextLong();
+            id = random.nextLong(100);
         } while (customerRepository.findById(id).isPresent()); // Check non repeat
         return id;
     }

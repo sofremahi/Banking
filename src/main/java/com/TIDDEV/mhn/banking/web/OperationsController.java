@@ -52,23 +52,42 @@ public class OperationsController {
     @GetMapping("/deposit/{mainAccNo}/{transactionAmount}")
     public Response<OperatingDepositDto> deposit(@PathVariable String mainAccNo,
                                                  @PathVariable BigDecimal transactionAmount) {
-        transactionService.add(TransactionType.deposit,
+        OperatingDepositDto dto ;
+        try{
+            dto =service.depositDto(mainAccNo, transactionAmount) ;
+         transactionService.add(TransactionType.deposit,
                 null, transactionAmount,
                 accService.findByNo(mainAccNo).getId(), TransactionStatus.success);
-        return new Response<>(service.depositDto(mainAccNo, transactionAmount));
+        return new Response<>(dto);}catch (NotEnoughMoneyException e){
+            transactionService.add(TransactionType.deposit,
+                    null, transactionAmount,
+                    accService.findByNo(mainAccNo).getId(), TransactionStatus.failure);
+            throw e;
+        }catch (NotValidInputException e){
+            throw e ;
+        }
     }
 
     @GetMapping("/withdraw/{mainAccNo}/{transactionAmount}")
     public Response<OperationWithdrawDto> withdraw(@PathVariable String mainAccNo,
                                                    @PathVariable BigDecimal transactionAmount) {
+        OperationWithdrawDto dto ;
+        try{ dto = service.withdrawDto(mainAccNo, transactionAmount);
         transactionService.add(TransactionType.withdraw,
                 null, transactionAmount,
                 accService.findByNo(mainAccNo).getId(), TransactionStatus.success);
-        return new Response<>(service.withdrawDto(mainAccNo, transactionAmount));
+        return new Response<>(dto);}catch (NotEnoughMoneyException e){
+            transactionService.add(TransactionType.withdraw,
+                    null, transactionAmount,
+                    accService.findByNo(mainAccNo).getId(), TransactionStatus.failure);
+            throw e;
+        }catch (NotValidInputException e){
+            throw e ;
+        }
     }
     @GetMapping("/delete/transactions")
     public void deleteTransactions(){
         service.deleteTransactions();
-        System.out.println("transactions deleted");
+        System.out.println("all transactions status set to deleted");
     }
 }

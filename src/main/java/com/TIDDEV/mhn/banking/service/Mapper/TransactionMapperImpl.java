@@ -1,10 +1,11 @@
 package com.TIDDEV.mhn.banking.service.Mapper;
 import com.TIDDEV.mhn.banking.service.model.Transaction;
 import com.TIDDEV.mhn.banking.service.modelDto.TransactionDto;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
+@Component
 public class TransactionMapperImpl implements TransactionMapper {
     @Override
     public Transaction dtoToTransaction(TransactionDto dto) {
@@ -24,7 +25,7 @@ public class TransactionMapperImpl implements TransactionMapper {
         TransactionDto dto = new TransactionDto();
         dto.setTransactionAmount(transaction.getTransactionAmount());
         dto.setStatus(transaction.getStatus());
-        dto.setAccount(transaction.getAccount());
+        dto.setAccNo(transaction.getAccount().getNumber());
         dto.setId(transaction.getId());
         dto.setType(transaction.getType());
         dto.setDateTime(transaction.getDateTime());

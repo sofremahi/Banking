@@ -22,5 +22,5 @@ public class TransactionDto {
     private Long toAccId;
     private BigDecimal transactionAmount;
     private TransactionStatus status;
-    private Account account;
+    private String accNo;
 }

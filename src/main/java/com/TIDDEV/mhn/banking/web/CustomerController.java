@@ -3,12 +3,11 @@ package com.TIDDEV.mhn.banking.web;
 import com.TIDDEV.mhn.banking.common.response.Response;
 import com.TIDDEV.mhn.banking.service.CustomerService;
 import com.TIDDEV.mhn.banking.service.model.Customer;
+import com.TIDDEV.mhn.banking.service.modelDto.CustomerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -44,7 +43,12 @@ public class CustomerController {
     public Response<Customer> findByNationalCode(@PathVariable("customerNationalCode") String nationalCode) {
         return new Response<>(service.findByNationalCode(nationalCode), HttpStatus.FOUND);
     }
+@PostMapping
+    public Response<String> addCustomer(@RequestBody CustomerDto dto){
+         service.addCustomer(dto);
+         return new Response<>("customer added ") ;
 
+}
 
 
 }

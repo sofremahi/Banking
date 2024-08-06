@@ -13,8 +13,10 @@ import com.TIDDEV.mhn.banking.service.repository.CustomerRepository;
 import com.TIDDEV.mhn.banking.service.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 
 @Service
@@ -35,26 +37,35 @@ public class OperationServiceImpl implements OperationService {
             //operating
             Account main = accRepository.findByNo(accNoMain);
             Account target = accRepository.findByNo(accNoTarget);
-            main.setAccountAmount(main.getAccountAmount().subtract(transactionAmount));
-            if (main.getAccountAmount().compareTo(new BigDecimal("10")) <= 0) {
+            if (main.getAccountAmount().subtract(transactionAmount).compareTo(new BigDecimal("10")) <= 0) {
                 throw new NotEnoughMoneyException("Insufficient funds in the main account.");
-            }
-            target.setAccountAmount(target.getAccountAmount().add(transactionAmount));
-            accRepository.save(main);
-            accRepository.save(target);
+            } else {
+                main.setAccountAmount(main.getAccountAmount().subtract(transactionAmount));
+                target.setAccountAmount(target.getAccountAmount().add(transactionAmount));
+                accRepository.save(main);
+                accRepository.save(target);
 
-            //setting the dto
-            OperationTransferDto dto = new OperationTransferDto();
-            dto.setMainAccNo(accNoMain);
-            dto.setTargetAccNo(accNoTarget);
-            dto.setNameMain(main.getCustomer().getName());
-            dto.setNameTarget(target.getCustomer().getName());
-            dto.setType(TransactionType.transfer);
-            dto.setTransactionAmount(transactionAmount);
-            dto.setRemaining(main.getAccountAmount());
-            return dto;
+                //setting the dto
+                OperationTransferDto dto = new OperationTransferDto();
+                dto.setMainAccNo(accNoMain);
+                dto.setTargetAccNo(accNoTarget);
+                dto.setNameMain(main.getCustomer().getName());
+                dto.setNameTarget(target.getCustomer().getName());
+                dto.setType(TransactionType.transfer);
+                dto.setTransactionAmount(transactionAmount);
+                dto.setRemaining(main.getAccountAmount());
+                return dto;
+            }
+        }else if(accRepository.findByNo(accNoMain) == null){
+            throw new NotValidInputException("try entering a valid main account number");
+        }else if (accRepository.findByNo(accNoTarget) == null){
+            throw new NotValidInputException("try entering a valid target account number");
+        }else if( transactionAmount.compareTo(new BigDecimal(0)) < 0){
+            throw new NotValidInputException("try entering a valid transaction amount");
         }
-        throw new NotValidInputException("try entering a valid input");
+
+        throw new NotValidInputException("try entering a valid main account number and a valid target account number with a" +
+                " valid transaction amount");
     }
 
     @Override
@@ -64,7 +75,7 @@ public class OperationServiceImpl implements OperationService {
             //operating
             Account main = accRepository.findByNo(accNoMain);
             main.setAccountAmount(main.getAccountAmount().add(transactionAmount));
-            accRepository.save(main);
+           accRepository.save(main);
             //setting dto
             OperatingDepositDto dto = new OperatingDepositDto();
             dto.setMainAccNo(accNoMain);
@@ -73,8 +84,12 @@ public class OperationServiceImpl implements OperationService {
             dto.setTransactionAmount(transactionAmount);
             dto.setRemaining(main.getAccountAmount());
             return dto;
+        } else if (accRepository.findByNo(accNoMain) == null) {
+            throw new NotValidInputException("try entering a valid account number ");
+        }else if( transactionAmount.compareTo(new BigDecimal(0)) < 0){
+            throw new NotValidInputException("try entering a valid transaction amount") ;
         }
-        throw new NotValidInputException("try entering a valid input");
+        throw new NotValidInputException("try entering a valid input for both account number and transaction amount");
     }
 
     @Override
@@ -83,25 +98,30 @@ public class OperationServiceImpl implements OperationService {
                 transactionAmount.compareTo(new BigDecimal(0)) >= 0) {
             //operating
             Account main = accRepository.findByNo(accNoMain);
-            main.setAccountAmount(main.getAccountAmount().subtract(transactionAmount));
-            if (main.getAccountAmount().compareTo(new BigDecimal("10")) <= 0) {
+            if (main.getAccountAmount().subtract(transactionAmount).compareTo(new BigDecimal("10")) <= 0) {
                 throw new NotEnoughMoneyException("Insufficient funds in the main account.");
+            } else {
+                main.setAccountAmount(main.getAccountAmount().subtract(transactionAmount));
+                accRepository.save(main);
+                //setting dto
+                OperationWithdrawDto dto = new OperationWithdrawDto();
+                dto.setMainAccNo(accNoMain);
+                dto.setNameMain(main.getCustomer().getName());
+                dto.setType(TransactionType.withdraw);
+                dto.setTransactionAmount(transactionAmount);
+                dto.setRemaining(main.getAccountAmount());
+                return dto;
             }
-            accRepository.save(main);
-            //setting dto
-            OperationWithdrawDto dto = new OperationWithdrawDto();
-            dto.setMainAccNo(accNoMain);
-            dto.setNameMain(main.getCustomer().getName());
-            dto.setType(TransactionType.withdraw);
-            dto.setTransactionAmount(transactionAmount);
-            dto.setRemaining(main.getAccountAmount());
-            return dto;
+        }else if(accRepository.findByNo(accNoMain) == null){
+            throw new NotValidInputException("try entering a valid account number") ;
+        }else if(transactionAmount.compareTo(new BigDecimal(0)) < 0){
+            throw new NotValidInputException("try entering a valid transaction amount") ;
         }
-        throw new NotValidInputException("try entering a valid input");
+        throw new NotValidInputException("try entering a valid input for both account number and transaction amount");
     }
-
+@Transactional
     @Override
     public void deleteTransactions() {
-transactionRepository.deleteAll();
+        transactionRepository.setDeletedStatusTrue();
     }
 }

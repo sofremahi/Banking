@@ -7,12 +7,14 @@ import com.TIDDEV.mhn.banking.service.modelDto.OperationWithdrawDto;
 import java.math.BigDecimal;
 
 public interface OperationService {
-    OperationTransferDto transferDto(String accNoMain, String accNoTarget,
-                                     BigDecimal transactionAmount);
+    OperationTransferDto transferDto(String accNoMain, String accNoTarget, BigDecimal transactionAmount);
 
     OperatingDepositDto depositDto(String accNoMain, BigDecimal transactionAmount);
-OperationWithdrawDto withdrawDto(String accNoMain , BigDecimal transactionAmount);
-void deleteTransactions();
+
+    OperationWithdrawDto withdrawDto(String accNoMain, BigDecimal transactionAmount);
+
+    void deleteTransactions();
+
 
 
 }

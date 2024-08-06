@@ -9,10 +9,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TransactionCustomRepository {
+    List<Transaction> findDeletedStatusFalse();
+
     Transaction findByNo(String no);
+
     List<Transaction> findByDate(LocalDate date);
-    List<Transaction> findByType (TransactionType type);
+
+    List<Transaction> findByType(TransactionType type);
+
     List<Transaction> findByToAcc(Long id);
+
     List<Transaction> findByAccTo(Long id);
-void deleteAll();
+
+    void setDeletedStatusTrue();
 }

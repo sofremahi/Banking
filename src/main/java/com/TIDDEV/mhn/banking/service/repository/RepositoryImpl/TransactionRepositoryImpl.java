@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import static com.TIDDEV.mhn.banking.service.model.QTransaction.transaction;
 
@@ -19,10 +20,14 @@ import java.util.List;
 public class TransactionRepositoryImpl implements TransactionCustomRepository {
     private  JPAQueryFactory queryFactory ;
 
-
     @Autowired
     public TransactionRepositoryImpl(EntityManager entityManager) {
         this.queryFactory = new JPAQueryFactory(entityManager);
+    }
+
+    @Override
+    public List<Transaction> findDeletedStatusFalse() {
+       return queryFactory.selectFrom(transaction).where(transaction.isDeleted.eq(false)).fetch();
     }
 
     @Override
@@ -44,17 +49,16 @@ public class TransactionRepositoryImpl implements TransactionCustomRepository {
     public List<Transaction> findByToAcc(Long id) {
         return queryFactory.selectFrom(transaction).where(transaction.toAccId.eq(id)).fetch();
     }
-
     @Override
     public List<Transaction> findByAccTo(Long id) {
         return queryFactory.selectFrom(transaction).where(transaction.account.id.eq(id)).fetch();
     }
 
+@Transactional
     @Override
-    public void deleteAll() {
-        queryFactory.delete(transaction)
-                .execute();
-    }
+    public void setDeletedStatusTrue() {
+        queryFactory.update(transaction).set(transaction.isDeleted , true)
+                .execute();   }
 
 
 }

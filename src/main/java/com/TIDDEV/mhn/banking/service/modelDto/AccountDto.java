@@ -12,5 +12,4 @@ public class AccountDto {
     private AccountType type;
     private BigDecimal accountAmount;
     private Boolean activeStatus;
-
 }

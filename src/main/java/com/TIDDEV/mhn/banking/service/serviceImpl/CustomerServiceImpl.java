@@ -1,14 +1,13 @@
 package com.TIDDEV.mhn.banking.service.serviceImpl;
 
 import com.TIDDEV.mhn.banking.service.CustomerService;
+import com.TIDDEV.mhn.banking.service.Mapper.CustomerMapper;
 import com.TIDDEV.mhn.banking.service.model.Customer;
+import com.TIDDEV.mhn.banking.service.modelDto.CustomerDto;
 import com.TIDDEV.mhn.banking.service.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -17,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
-
+private final CustomerMapper customerMapper;
 
 
     @Override
@@ -48,6 +47,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findByNationalCode(String nationalCode) {
         return customerRepository.findByNationalCode(nationalCode);
+    }
+    @Override
+    public void addCustomer(CustomerDto dto) {
+        Customer customer = customerMapper.dtoToCustomer(dto) ;
+       customerRepository.save(customer);
+
     }
 
 }

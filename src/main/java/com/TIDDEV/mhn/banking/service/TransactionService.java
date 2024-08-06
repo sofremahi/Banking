@@ -4,6 +4,7 @@ import com.TIDDEV.mhn.banking.service.enums.TransactionStatus;
 import com.TIDDEV.mhn.banking.service.enums.TransactionType;
 import com.TIDDEV.mhn.banking.service.model.Account;
 import com.TIDDEV.mhn.banking.service.model.Transaction;
+import com.TIDDEV.mhn.banking.service.modelDto.TransactionDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TransactionService {
-    List<Transaction> findAll() ;
+    List<TransactionDto> findAll() ;
     Transaction findById(UUID id);
     Transaction findByNo(String no);
     List<Transaction> findByDate(LocalDate date);

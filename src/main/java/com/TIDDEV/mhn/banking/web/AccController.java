@@ -1,17 +1,13 @@
 package com.TIDDEV.mhn.banking.web;
-
 import com.TIDDEV.mhn.banking.common.response.Response;
 import com.TIDDEV.mhn.banking.service.AccService;
 import com.TIDDEV.mhn.banking.service.enums.AccountType;
 import com.TIDDEV.mhn.banking.service.model.Account;
+import com.TIDDEV.mhn.banking.service.modelDto.AccountDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,7 +17,7 @@ import java.util.List;
 public class AccController {
     private final AccService service;
     @GetMapping("/find")
-    public Response<List<Account>> find() {
+    public Response<List<AccountDto>> find() {
         return new Response<>(service.findAll(), HttpStatus.FOUND);
     }
     @GetMapping("/find/by/id/{id}")
@@ -46,5 +42,10 @@ public class AccController {
     public Response<List<Account>> findByStat(@PathVariable("status") Boolean stat){
         return new Response<>(service.findActivationStatus(stat) , HttpStatus.FOUND);
     }
-
+    @PostMapping("/add/accounts/to/{customerId}")
+    public Response<List<AccountDto>> addAccounts(@PathVariable("customerId") Long id ,
+                                               @RequestBody List<AccountDto> accounts) {
+         service.addAccounts(id ,accounts);
+        return new Response<>("accounts added ");
+    }
 }
