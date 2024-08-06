@@ -31,8 +31,8 @@ protected void configure(HttpSecurity http) throws Exception {
     http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/rest/**").hasRole("ADMIN")
-            .antMatchers("/rest/banking/account/find").hasRole("USER")
+            .antMatchers("/rest/banking/account/find").hasAnyRole("USER", "ADMIN") // first
+            .antMatchers("/rest/**").hasRole("ADMIN") // last
             .anyRequest().authenticated()
             .and()
             .httpBasic();
@@ -40,7 +40,7 @@ protected void configure(HttpSecurity http) throws Exception {
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("username")
+        UserDetails user = User.withUsername("user")
                 .password(passwordEncoder().encode("password"))
                 .roles("USER")
                 .build();
