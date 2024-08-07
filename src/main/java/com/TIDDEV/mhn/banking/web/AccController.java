@@ -26,7 +26,9 @@ public class AccController {
     }
     @GetMapping("/find")
     public Response<List<AccountDto>> find() {
+        System.out.println("in the method");
         return new Response<>(service.findAll(), HttpStatus.FOUND);
+
     }
     @GetMapping("/find/by/id/{id}")
     public Response<Account> findById(@PathVariable("id") Long id){
