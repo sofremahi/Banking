@@ -35,6 +35,7 @@ public class OperationServiceImpl implements OperationService {
     public String getMessage(String code) {
         return messageSource.getMessage(code, null, Locale.getDefault());
     }
+    @Transactional
     public OperationTransferDto transferDto(String accNoMain, String accNoTarget,
                                             BigDecimal transactionAmount) {
         // check if the statements given are valid
