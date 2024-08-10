@@ -35,6 +35,7 @@ public class OperationServiceImpl implements OperationService {
     public String getMessage(String code) {
         return messageSource.getMessage(code, null, Locale.getDefault());
     }
+    @Transactional
     public OperationTransferDto transferDto(String accNoMain, String accNoTarget,
                                             BigDecimal transactionAmount) {
         // check if the statements given are valid
@@ -75,6 +76,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
+    @Transactional
     public OperatingDepositDto depositDto(String accNoMain, BigDecimal transactionAmount) {
         if (accRepository.findByNo(accNoMain) != null &&
                 transactionAmount.compareTo(new BigDecimal(0)) >= 0) {
@@ -99,6 +101,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
+    @Transactional
     public OperationWithdrawDto withdrawDto(String accNoMain, BigDecimal transactionAmount) {
         if (accRepository.findByNo(accNoMain) != null &&
                 transactionAmount.compareTo(new BigDecimal(0)) >= 0) {
