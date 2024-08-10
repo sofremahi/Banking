@@ -87,66 +87,13 @@
 			<version>1.6.14</version> <!-- This version is compatible with Spring Boot 2.7.x
 			 http://localhost:8080/swagger-ui/index.html -->
 		</dependency>
-		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-			<version>6.18.1</version> <!-- Use the latest version -->
-		</dependency>
-
-		<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-aop</artifactId>
-	</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
-
-		<!-- Spring Data R2DBC for reactive database support -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.oracle.database.r2dbc/oracle-r2dbc -->
-		<dependency>
-			<groupId>com.oracle.database.r2dbc</groupId>
-			<artifactId>oracle-r2dbc</artifactId>
-			<version>1.2.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- R2DBC Dependency -->
-		<dependency>
-			<groupId>io.r2dbc</groupId>
-			<artifactId>r2dbc-spi</artifactId>
-		</dependency>
-
-		<!-- Reactive Web Dependencies -->
-		<dependency>
-			<groupId>io.projectreactor</groupId>
-			<artifactId>reactor-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-		</dependency>
-
-	</dependencies>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>
